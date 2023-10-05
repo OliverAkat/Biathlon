@@ -1,6 +1,7 @@
 import random
 
-targets = [0]*5
+target_amount = int(input("Hur många måltavlor vill du ha? "))
+targets = [0]*target_amount
 shots_taken = 0
 
 
@@ -18,15 +19,13 @@ f"""
 
 # Prints the board to the console
 def print_board():
-    print(*range(1, len(targets)+1))
+    print(*range(1, target_amount+1))
     print(*['*' if i == 0 else 'O' for i in targets])
 
 
-def handle_shot():
+def take_shot(position):
     global shots_taken
     shots_taken += 1
-    position = int(input(f'Shot nr {shots_taken} at: ')) - 1
-
     hit_or_miss = random.randint(0, 1)
 
     # Target was hit
@@ -44,14 +43,39 @@ def handle_shot():
     print()
 
 
+# Takes care of asking for input and
+def prompt_shot():
+    position = int(input(f'Shot nr {shots_taken+1} at: ')) - 1
+    take_shot(position)
+
+
+
+def restart_game():
+    global targets
+    global shots_taken
+    prompt_restart = input("Vill du starta om? (y/N)")
+    if prompt_restart.lower() == 'y':
+        targets = [0] * target_amount
+        shots_taken = 0
+        return True
+
+    return False
+
+
 def game():
     intro()
-    print(f'You got {len(targets)} shots\n')
-    while shots_taken < len(targets):
+    first_round = True
+    while first_round or restart_game():
+        first_round = False
+        print(f'You got {target_amount} shots\n')
+        while shots_taken < target_amount:
+            print_board()
+            prompt_shot()
         print_board()
-        handle_shot()
-    print_board()
-    print(f"You hit {sum(targets)} of {len(targets)} targets")
+        print(f"You hit {sum(targets)} of {len(targets)} targets")
+
     return
+
+
 
 game()
