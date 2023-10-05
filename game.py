@@ -1,5 +1,6 @@
 import random
 
+# Variables used throughout the game to track progress
 target_amount = int(input("Hur många måltavlor vill du ha? "))
 targets = [0]*target_amount
 shots_taken = 0
@@ -23,6 +24,7 @@ def print_board():
     print(*['*' if i == 0 else 'O' for i in targets])
 
 
+# Takes care of taking the shot at a given target
 def take_shot(position):
     global shots_taken
     shots_taken += 1
@@ -43,13 +45,13 @@ def take_shot(position):
     print()
 
 
-# Takes care of asking for input and
-def prompt_shot():
+# Prompts input and takes the shot
+def handle_shot():
     position = int(input(f'Shot nr {shots_taken+1} at: ')) - 1
     take_shot(position)
 
 
-
+# Prompts restart and resets parameters
 def restart_game():
     global targets
     global shots_taken
@@ -64,13 +66,17 @@ def restart_game():
 
 def game():
     intro()
+
+    # Makes sure the game does not ask for a restart
+    # before the first round (the conditional statement
+    # does not check the second condition if the first one is true)
     first_round = True
     while first_round or restart_game():
         first_round = False
         print(f'You got {target_amount} shots\n')
         while shots_taken < target_amount:
             print_board()
-            prompt_shot()
+            handle_shot()
         print_board()
         print(f"You hit {sum(targets)} of {len(targets)} targets")
 
