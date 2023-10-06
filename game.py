@@ -28,6 +28,15 @@ def print_board():
     print(*range(1, target_amount+1))
     print(*['*' if i == 0 else 'O' for i in targets])
 
+def validateSkill():
+    global skill
+
+    if skill > 5:
+        skill = 5
+    elif skill < 1:
+        skill = 1
+
+
 def UpdateEnergy(energy):
     energy -= 1
     if energy == 0:
@@ -57,10 +66,23 @@ def take_shot(position):
     print()
 
 
+def validateShot(shot):
+    try:
+        shot = int(shot)
+    except:
+        return 0    
+
+    if shot >= target_amount:
+        return (target_amount - 1)
+    elif shot < 1:
+        return 1
+    return shot - 1
+
 # Prompts input and takes the shot
 def handle_shot():
-    position = int(input(f'Shot nr {shots_taken+1} at: ')) - 1
-    take_shot(position)
+    position = (input(f'Shot nr {shots_taken+1} at: ')) 
+    
+    take_shot(validateShot(position))
 
 
 # Prompts restart and resets parameters
@@ -78,7 +100,7 @@ def restart_game():
 
 def game():
     intro()
-
+    validateSkill()
     # Makes sure the game does not ask for a restart
     # before the first round (the conditional statement
     # does not check the second condition if the first one is true)
@@ -93,6 +115,7 @@ def game():
         print(f"You hit {sum(targets)} of {len(targets)} targets")
 
     return
+
 
 
 
