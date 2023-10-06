@@ -2,8 +2,13 @@ import random
 
 # Variables used throughout the game to track progress
 target_amount = int(input("Hur många måltavlor vill du ha? "))
+skill = int(input("Hur skicklig är du? 1-5 "))
+energy = 5
 targets = [0]*target_amount
 shots_taken = 0
+
+
+
 
 
 # Prints an intro with formatted text to the console
@@ -16,22 +21,29 @@ f"""
 {'a hit or miss game'.center(row_length)}
 {'~'*row_length}
 """)
-
+    
 
 # Prints the board to the console
 def print_board():
     print(*range(1, target_amount+1))
     print(*['*' if i == 0 else 'O' for i in targets])
 
-
+def UpdateEnergy(energy):
+    energy -= 1
+    if energy == 0:
+        energy = 1
+    return energy
 # Takes care of taking the shot at a given target
 def take_shot(position):
     global shots_taken
+    global energy
     shots_taken += 1
-    hit_or_miss = random.randint(0, 1)
+    hit_or_miss = random.randint(-5, 5) + skill - (5-energy)
 
+    energy = UpdateEnergy(energy)
+    
     # Target was hit
-    if hit_or_miss:
+    if hit_or_miss >= 0:
         # Target was previously hit
         if targets[position]:
             print("Hit on closed target")
